@@ -1,0 +1,209 @@
+I have exam about Backend Developer, then i want to know how to do. 
+I uses Xampp to database and Flutter this project.
+
+1. Create a database with your own data and create a table:
+ Table create:
+ 1.1. Tb_Address 
+	Field: id, village, district, province, personalId.
+	Type: int, varchar, varchar, varchar, int.
+	Size: 10, 100, 100, 100, 10.
+	Key: PK, null, null, null, FK.
+	Reference: null, null, null, null, Tb_PersonalInfo.
+	Description: Auto Increment, null, null, null, null.
+ 1.2. Tb_PersonalInfo 
+	Field: id, firstname, lastname, dateofbirth, tel, age.
+	Type: int, varchar, varchar, varchar, varchar, int.
+	Size: 10, 70, 70, 15, 20, 5.
+	Key: PK, null, null, null, null, null.
+	Reference: null, null, null, null, null, null.
+	Description: Auto Increment, null, null, null, null, null.
+2. Create a Project UI (web-javascript) and connect to the database.
+3. Create a RESTful API to connect to the API and save the data into the table in (1) Details below:
+
+ 3.1. API data required
+- Request Template
+URL:(Define yourself)
+Method: POST
+Headers: Body(JSON)
+Content-Type: firstName, lastName, tel, dateOfBirth
+Application/json:{"firstName":"John", "lastName":"Doe", "tel":"123-456-7890", "dateOfBirth":"1990-05-15"}
+
+- Response Template
+{
+"firstName": "John",
+"lastName": "Doe",
+"dateOfBirth": "1990-05-15",
+"tel": "123-456-7890",
+"address": "village:Vill A, district:Dist A, province:Prov A | village:Vill B, district:Dist B, province:Prov B | village:Vill C, district:Dist C, province:Prov C"
+}
+
+ 3.2. RESTful API information to be created on web ui:
+- Request Template
+URL:(Define yourself)
+Method: POST
+Headers: Body(JSON)
+Content-Type: firstName, lastName, tel, dateOfBirth
+Application/json:{"firstName":"John", "lastName":"Doe", "tel":"123-456-7890", "dateOfBirth":"1990-05-15"}
+
+- Response Template
+{
+	"id": 1,
+	"firstName": "John",
+	"lastName": "Doe",
+	"tel": "123-456-7890",
+	"address": [
+{"id": 1, "village":"Vill A", "district":"Dist X", "province":Prov Y},
+{"id": 2, "village":"Vill B", "district":"Dist B", "province":Prov B},
+{"id": 3, "village":"Vill C", "district":"Dist C", "province":Prov C}
+	]
+}
+
+
+🧩 Step 1: Create the Database in XAMPP (MySQL)
+
+1. Open XAMPP → Start Apache and MySQL
+
+2. Go to phpMyAdmin → "http://localhost/phpmyadmin"
+
+3. Create a new database, e.g., "backend_exam"
+
+SQL to Create Tables
+__________________________________________________________
+CREATE DATABASE backend_exam;
+USE backend_exam;
+
+-- Table 1: Tb_PersonalInfo
+CREATE TABLE Tb_PersonalInfo (
+  id INT(10) AUTO_INCREMENT PRIMARY KEY,
+  firstname VARCHAR(70),
+  lastname VARCHAR(70),
+  dateofbirth VARCHAR(15),
+  tel VARCHAR(20),
+  age INT(5)
+);
+
+-- Table 2: Tb_Address
+CREATE TABLE Tb_Address (
+  id INT(10) AUTO_INCREMENT PRIMARY KEY,
+  village VARCHAR(100),
+  district VARCHAR(100),
+  province VARCHAR(100),
+  personalId INT(10),
+  FOREIGN KEY (personalId) REFERENCES Tb_PersonalInfo(id)
+);
+__________________________________________________________
+✅ Note: "personalId" in "Tb_Address" links to the id in "Tb_PersonalInfo".
+
+💻 Step 2: Create Backend RESTful API (PHP + MySQL Example)
+
+Create a folder in "htdocs" → "backend_exam_api"
+
+File structure:
+__________________________________________________________
+backend_exam_api/
+│
+├── db.php
+├── insert_person.php
+└── get_person.php
+__________________________________________________________
+
+"db.php" — Database Connection
+__________________________________________________________
+<?php
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "backend_exam";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+if ($conn->connect_error) {
+  die(json_encode(["error" => "Connection failed: " . $conn->connect_error]));
+}
+?>
+__________________________________________________________
+
+"insert_person.php" — Insert Data via POST (API #1)
+
+URL: "http://localhost/backend_exam_api/insert_person.php"
+Method: "POST"
+Body (JSON):
+__________________________________________________________
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "tel": "123-456-7890",
+  "dateOfBirth": "1990-05-15"
+}
+__________________________________________________________
+
+Code:
+__________________________________________________________
+<?php
+header("Content-Type: application/json");
+include "db.php";
+
+$data = json_decode(file_get_contents("php://input"), true);
+
+$firstName = $data["firstName"];
+$lastName = $data["lastName"];
+$tel = $data["tel"];
+$dateOfBirth = $data["dateOfBirth"];
+
+// Calculate age (simple method)
+$birthDate = new DateTime($dateOfBirth);
+$today = new DateTime("today");
+$age = $birthDate->diff($today)->y;
+
+// Insert into personal info
+$sql = "INSERT INTO Tb_PersonalInfo (firstname, lastname, dateofbirth, tel, age)
+        VALUES ('$firstName', '$lastName', '$dateOfBirth', '$tel', '$age')";
+$conn->query($sql);
+$personId = $conn->insert_id;
+
+// Example: Insert 3 addresses
+$addresses = [
+  ["village" => "Vill A", "district" => "Dist X", "province" => "Prov Y"],
+  ["village" => "Vill B", "district" => "Dist B", "province" => "Prov B"],
+  ["village" => "Vill C", "district" => "Dist C", "province" => "Prov C"]
+];
+
+foreach ($addresses as $addr) {
+  $v = $addr["village"];
+  $d = $addr["district"];
+  $p = $addr["province"];
+  $conn->query("INSERT INTO Tb_Address (village, district, province, personalId) VALUES ('$v','$d','$p',$personId)");
+}
+
+// Build response
+$response = [
+  "id" => $personId,
+  "firstName" => $firstName,
+  "lastName" => $lastName,
+  "tel" => $tel,
+  "address" => $addresses
+];
+
+echo json_encode($response);
+?>
+__________________________________________________________
+
+You said:
+Step 4. is I have to create dart and put in which folder or something else?
+You said:
+Is say Error: ClientException: Failed to fetch
+You said:
+No need to use dart now.
+Return to index.html in the console say:
+TypeError: NetworkError when attempting to fetch resource. index.html:36:29
+    submitData file:///C:/xampp/htdocs/backend_exam_api/index.html:36
+    (Async: promise callback)
+    submitData file:///C:/xampp/htdocs/backend_exam_api/index.html:36
+    onclick file:///C:/xampp/htdocs/backend_exam_api/index.html:1
+
+In tb_personalinfo only generate IDs buy other data is empty.
+You said:
+IS WORK!!!
+You said:
+Yes, more.
+You said:
+Before we continue. how do I save our chat?
