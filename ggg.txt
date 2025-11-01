@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Backend Exam</title>
+</head>
+<body>
+  <h2>Add Personal Info</h2>
+  <form id="personForm">
+    First Name: <input type="text" id="firstName"><br>
+    Last Name: <input type="text" id="lastName"><br>
+    Tel: <input type="text" id="tel"><br>
+    Date of Birth: <input type="date" id="dateOfBirth"><br>
+    <button type="button" onclick="submitData()">Submit</button>
+  </form>
+
+  <pre id="response"></pre>
+
+  <script>
+  function submitData() {
+    const data = {
+      firstName: document.getElementById("firstName").value,
+      lastName: document.getElementById("lastName").value,
+      tel: document.getElementById("tel").value,
+      dateOfBirth: document.getElementById("dateOfBirth").value
+    };
+
+    fetch("http://localhost/backend_exam_api/insert_person.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    })
+    .then(res => res.json())
+    .then(json => {
+      document.getElementById("response").textContent = JSON.stringify(json, null, 2);
+    })
+    .catch(err => console.error("Fetch error:", err));
+    }
+  </script>
+</body>
+</html>
