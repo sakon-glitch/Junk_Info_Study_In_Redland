@@ -1,0 +1,39 @@
+ffmpeg -i "OCIuei20Xg7YT6tZ.mp4" -b:v 2M -vf "setpts=(PTS-STARTPTS)/4" -af atemop=4 -r 60 "26/10/2025_OCIuei20Xg7YT6tZ.mp4"
+
+ffmpeg -i "OCIuei20Xg7YT6tZ.mp4" -b:v 2M -vf "fps=60, setpts=(1/200)*PTS" "26-10-2025_OCIuei20Xg7YT6tZ.mp4"
+
+ffmpeg -i "OCIuei20Xg7YT6tZ.mp4" -filter:v "setpts=PTS/4" -r 60 "26-10-2025_OCIuei20Xg7YT6tZ_Copy.mp4"
+
+ffmpeg -i "MkDQsKfuUHJOV0Be.mp4" -filter:v "setpts=PTS/4" -af atemop=4 -b:v 2M -r 60 "MkDQsKfuUHJOV0Be_Copy.mp4"
+
+
+Bitrate Up
+ffmpeg -i input.mp4 -b:v 2M -b:a 192k output.mp4
+
+
+Video			Audio
+2x = setpts=0.5*PTS	atempo=2.0
+4x = setpts=0.25*PTS	atempo=2.0,atempo=2.0
+8x = setpts=0.125*PTS	atempo=2.0,atempo=2.0,atempo=2.0
+ffmpeg -i "MkDQsKfuUHJOV0Be.mp4" -filter_complex "[0:v]setpts=0.25*PTS [v] ; [0:a] atempo=2.0,atempo=2.0 [a]" -map "[v]" -map "[a]" -r 60 "MkDQsKfuUHJOV0Be_Copy.mp4"
+
+ffmpeg -r 30 -i "https://piczel.tv/static/recordings/default/live/1282/oj3DHlapy1Ow0AQV.mp4" -b:v 2M -b:a 192k -filter_complex "[0:v]setpts=0.25*PTS [v] ; [0:a] atempo=2.0,atempo=2.0 [a]" -map "[v]" -map "[a]" -r 60 "29-10-2025_oj3DHlapy1Ow0AQV.mp4"
+
+
+4te: 30fps V=1000k A=48K
+ffmpeg -r 30 -i "https://piczel.tv/static/recordings/default/live/49221/7lNxBdj5ADwEy8ZU.mp4" -b:v 1000k -b:a 48k -filter_complex "[0:v]setpts=0.25*PTS [v] ; [0:a] atempo=2.0,atempo=2.0 [a]" -map "[v]" -map "[a]" -r 60 "23-11-2025_7lNxBdj5ADwEy8ZU.mp4"
+
+Banderi: 60fps V=1206k A=48K
+ffmpeg -r 60 -i "https://piczel.tv/static/recordings/default/live/8748/kFoBquZ74eJxngAE.mp4" -b:v 1206k -b:a 48k -filter_complex "[0:v]setpts=0.25*PTS [v] ; [0:a] atempo=2.0,atempo=2.0 [a]" -map "[v]" -map "[a]" -r 60 "13-11-2025_kFoBquZ74eJxngAE.mp4"
+
+Jinti: 30fps V=1206k A=48K
+ffmpeg -r 30 -i "https://piczel.tv/static/recordings/default/live/1282/YpKiGOawxkvbyg5z.mp4" -b:v 1206k -b:a 48k -filter_complex "[0:v]setpts=0.25*PTS [v] ; [0:a] atempo=2.0,atempo=2.0 [a]" -map "[v]" -map "[a]" -r 60 "21-11-2025_YpKiGOawxkvbyg5z.mp4"
+
+Poiuytrew: 30fps V=1668k A=44.1K
+ffmpeg -r 30 -i "https://piczel.tv/static/recordings/default/live/8718/onOpeRCJkNZv7hlV.mp4" -b:v 1668k -b:a 44.1k -filter_complex "[0:v]setpts=0.25*PTS [v] ; [0:a] atempo=2.0,atempo=2.0 [a]" -map "[v]" -map "[a]" -r 60 "27-11-2025_onOpeRCJkNZv7hlV.mp4"
+
+TheRedGhost: 30fps V=2580k A=48k
+ffmpeg -r 30 -i "https://piczel.tv/static/recordings/default/live/10789/ZYi7bukUMcOrh1Pm.mp4" -b:v 2580k -b:a 48k -filter_complex "[0:v]setpts=0.25*PTS [v] ; [0:a] atempo=2.0,atempo=2.0 [a]" -map "[v]" -map "[a]" -r 60 "13-11-2025_ZYi7bukUMcOrh1Pm.mp4"
+
+Toonpower: 30fps V=2120k A=48k
+ffmpeg -r 30 -i "https://piczel.tv/static/recordings/default/live/71285/j48Ug6tOmLxWzpVT.mp4" -b:v 2120k -b:a 48k -filter_complex "[0:v]setpts=0.25*PTS [v] ; [0:a] atempo=2.0,atempo=2.0 [a]" -map "[v]" -map "[a]" -r 60 "27-11-2025_j48Ug6tOmLxWzpVT.mp4"
