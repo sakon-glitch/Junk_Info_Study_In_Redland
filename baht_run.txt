@@ -32,6 +32,9 @@ ffmpeg -r 30 -i "https://piczel.tv/static/recordings/default/live/1282/YpKiGOawx
 Poiuytrew: 30fps V=1668k A=44.1K
 ffmpeg -r 30 -i "https://piczel.tv/static/recordings/default/live/8718/onOpeRCJkNZv7hlV.mp4" -b:v 1668k -b:a 44.1k -filter_complex "[0:v]setpts=0.25*PTS [v] ; [0:a] atempo=2.0,atempo=2.0 [a]" -map "[v]" -map "[a]" -r 60 "27-11-2025_onOpeRCJkNZv7hlV.mp4"
 
+RedishDragiet: 30fps V=2500k A=48k
+ffmpeg -r 30 -i "MYR6ovzuBZSi0kj3.mp4" -b:v 2580k -b:a 48k -filter_complex "[0:v]setpts=0.25*PTS [v] ; [0:a] atempo=2.0,atempo=2.0 [a]" -map "[v]" -map "[a]" -r 60 "13-11-2025_MYR6ovzuBZSi0kj3.mp4"
+
 TheRedGhost: 30fps V=2580k A=48k
 ffmpeg -r 30 -i "https://piczel.tv/static/recordings/default/live/10789/ZYi7bukUMcOrh1Pm.mp4" -b:v 2580k -b:a 48k -filter_complex "[0:v]setpts=0.25*PTS [v] ; [0:a] atempo=2.0,atempo=2.0 [a]" -map "[v]" -map "[a]" -r 60 "13-11-2025_ZYi7bukUMcOrh1Pm.mp4"
 
